@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="https://cdn.tutorialjinni.com/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdn.tutorialjinni.com/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <form id="contact" name="google-sheet" method="POST">
+            <h1>Patient Registration Form</h1>
+            <h3>Fill the form below and press the submit button!</h3>
+            <div class="row">
+                <!-- first column -->
+                <div class="column">
+                    <p>Full Name:</p>
+                    <fieldset>
+                        <input type="text" placeholder="Full Name *" name="Name" id="Name" required autofocus>
+                    </fieldset>
+                    <p>Email Id:</p>
+                    <fieldset>
+                        <input type="email" placeholder="Your email *" name="Email" id="Email" required autofocus>
+                    </fieldset>
+                    <p>Address:</p>
+                    <fieldset>
+                        <input type="address" placeholder="Your address *" name="Address" id="Address" required autofocus>
+                    </fieldset>
+                    <p>Date of Birth:</p>
+                    <fieldset>
+                        <input type="text" placeholder="Date of birth *" name="Date" id="Date" onfocus="(this.type = 'date')"
+                            required autofocus>
+                    </fieldset>
+                    <p>Mobile Number:</p>
+                    <fieldset>
+                        <input type="text" placeholder="Mobile number *" name="Mobile" id="Mobile" required autofocus>
+                    </fieldset>
+                </div>
+                <!-- second column -->
+                <div class="column">
+                    <p>Gender:</p>
+                    <fieldset>
+                        <input type="text" placeholder="Gender *" name="Gender" id="Gender" required autofocus>
+                    </fieldset>
+                    <p>Weight:</p>
+                    <fieldset>
+                        <input type="weight" placeholder="Your Weight in Kg *" name="Weight" id="Weight" required autofocus>
+                    </fieldset>
+                    <p>BloodGroup:</p>
+                    <fieldset>
+                        <input type="bloodgroup" placeholder="Your bloodgroup *" name="Bloodgroup" id="Bloodgroup" required autofocus>
+                    </fieldset>
+                    <p>Aadhaar Number:</p>
+                    <fieldset>
+                        <input type="aadhaar" placeholder="Your aadhaar number *" name="Aadhaar" id="Aadhaar" required autofocus>
+                    </fieldset>
+                </div>
+            </div>
+            <!-- submit button -->
+            <fieldset>
+                <input type="submit" value="Submit" id="button" name="submit" class="btn btn-primary" onclick="generateqr()">
+            </fieldset>
+            <div id="qrcode"></div>
+        </form>
+    </div>
+    <!-- Javascript to initialize the code list -->
+    <script>
+        var input = document.querySelector("#phone");
+        window.intlTelInput(input, {
+            separateDialCode: true
+        });
+    </script>
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyEs10t_Q_U_a4QSKtLORBUSboFTwC0W4kU25kMqfb3b9tHL7Fyy8PD9u-4bi_01cs/exec'
+        const form = document.forms['google-sheet']
+
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => alert("Thanks for Contacting us..! We Will Contact you Soon..."))
+                .catch(error => console.error('Error!', error.message))
+        })
+    </script>
+    <script>
+        function generateqr() {
+            var Name = document.getElementById('Name').value;
+            var Email = document.getElementById('Email').value;
+            var Address = document.getElementById('Address').value;
+            var Date = document.getElementById('Date').value;
+            var Mobile = document.getElementById('Mobile').value;
+            var Gender = document.getElementById('Gender').value;
+            var Weight = document.getElementById('Weight').value;
+            var Bloodgroup = document.getElementById('Bloodgroup').value;
+            var Aadhaar = document.getElementById('Aadhaar').value;
+
+            console.log('Name: ' + Name + " " + Email + " " + Address + " " + Date + " " + Mobile + " " + Gender + " " + Weight + " " + Bloodgroup + " " + Aadhaar);
+
+            var url = "https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=Name:" +
+            Name + "%0aEmail: " + Email + "%0aAddress: " + Address + "%0aDate: " + Date + "%0aMobile: " + Mobile + "%0aGender: " + Gender + "%0aWeight: " + Weight + "%0aBloodgroup: " + Bloodgroup + "%0aAadhaar: " + Aadhaar;
+
+            var ifr = `<iframe src="${url}" height="200" width="200"></iframe>`;
+
+			document.getElementById('qrcode').innerHTML = ifr;
+        }
+    </script>
+</body>
+
+</html>
